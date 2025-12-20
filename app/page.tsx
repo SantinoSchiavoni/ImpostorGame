@@ -1,0 +1,12 @@
+import GameManager from '@/components/game/GameManager';
+
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-slate-950 text-white selection:bg-indigo-500/30">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20 pointer-events-none" />
+      <div className="relative z-10 w-full max-w-5xl items-center justify-center font-mono text-sm lg:flex">
+        <GameManager />
+      </div>
+    </main>
+  );
+}

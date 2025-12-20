@@ -45,6 +45,48 @@ const INITIAL_DATA = [
             "Lucas Menossi", "Sebastián Prediger", "Alan Lescano", "Luciano Gondou", "Mateo Sanabria",
             "Tobías Cervera", "Juan Pintado", "Saúl Salcedo", "Gastón Benavídez", "Juan Espínola"
         ]
+    },
+    {
+        "name": "Fútbol Internacional (5 grandes ligas)",
+        "difficulty": "Facil",
+        "words": [
+            "Mbappe", "Haaland", "Vinicius Jr", "Bellingham", "Robert Lewandowski",
+            "Mohamed Salah", "Harry Kane", "Kevin De Bruyne", "Lamine Yamal", "Griezmann",
+            "Luka Modric", "Courtois", "Bernardo Silva", "Pedri", "Lautaro Martinez",
+            "Julián Álvarez", "Luis Diaz", "Darwin Nuñez", "Dembélé", "Musiala",
+            "Bukayo Saka", "Enzo Fernandez", "Alisson Becker", "Rodri", "Fede Valverde",
+            "Bruno Fernandes", "Rodrygo", "Kyle Walker", "Marcus Rashford", "Gavi",
+            "Virgil van Dijk", "Osimhen", "Rafael Leao", "Theo Hernandez", "Pulisic",
+            "Donnarumma", "Hakimi", "Florian Wirtz", "Xavi Simons", "Alexander Arnold"
+        ]
+    },
+    {
+        "name": "Fútbol Internacional (5 grandes ligas)",
+        "difficulty": "Medio",
+        "words": [
+            "Cole Palmer", "Nico Williams", "Alexis Mac Allister", "Douglas Luiz", "Zaniolo",
+            "Micky van de Ven", "Gleison Bremer", "Federico Chiesa", "Dusan Vlahovic", "Barella",
+            "Hakan Calhanoglu", "Marcus Thuram", "Pavard", "Jeremie Frimpong", "Grimaldo",
+            "Victor Boniface", "Serhou Guirassy", "Loïs Openda", "Dani Olmo", "Mikel Merino",
+            "Zubimendi", "Isco", "Savinho", "Artem Dovbyk", "Aleix Garcia",
+            "Takefusa Kubo", "Alexander Isak", "Bruno Guimaraes", "Lucas Paqueta", "Jarrod Bowen",
+            "James Maddison", "Anthony Gordon", "Dominic Solanke", "Ollie Watkins", "Vicario",
+            "William Saliba", "Gabriel Magalhaes", "Vitinha", "Bradley Barcola", "Warren Zaire-Emery"
+        ]
+    },
+    {
+        "name": "Fútbol Internacional (5 grandes ligas)",
+        "difficulty": "Dificil",
+        "words": [
+            "Pervis Estupiñan", "Sandro Tonali", "Manuel Akanji", "Viktor Gyokeres", "Exequiel Palacios",
+            "Nico Schlotterbeck", "Gregor Kobel", "Morten Hjulmand", "Benjamin Sesko", "Piero Hincapie",
+            "Edmond Tapsoba", "Ruben Loftus-Cheek", "Tijjani Reijnders", "Gianluca Scamacca", "Matteo Guendouzi",
+            "Boubacar Kamara", "Eberechi Eze", "Michael Olise", "Bryan Mbeumo", "Lutsharel Geertruida",
+            "Jerdy Schouten", "Mats Wieffer", "Johan Bakayoko", "Arthur Theate", "Amadou Onana",
+            "Orel Mangala", "Zeno Debast", "Sacha Boey", "Mathys Tel", "Jamie Bynoe-Gittens",
+            "Brajan Gruda", "Assane Diao", "Cristhian Mosquera", "Pepelu", "Isaac Romero",
+            "Alex Baena", "Samu Omorodion", "Youssouf Fofana", "Facundo Medina", "Lucas Chevalier"
+        ]
     }
 ];
 

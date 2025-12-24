@@ -45,7 +45,7 @@ export default function RoleReveal({ players, onComplete }: RoleRevealProps) {
                         className="space-y-8"
                     >
                         <div className="space-y-4">
-                            <h2 className="text-3xl font-bold text-indigo-400">Jugador {currentIndex + 1}</h2>
+                            <h2 className="text-3xl font-bold text-indigo-400">{players[currentIndex].name}</h2>
                             <p className="text-slate-300 text-xl">Toma el teléfono</p>
                         </div>
                         <div className="text-6xl">📱</div>
@@ -61,7 +61,7 @@ export default function RoleReveal({ players, onComplete }: RoleRevealProps) {
                         className="w-full h-full flex flex-col justify-between py-10"
                     >
                         <div className="space-y-2">
-                            <h3 className="text-slate-400">Jugador {currentIndex + 1}</h3>
+                            <h3 className="text-slate-400">{currentPlayer.name}</h3>
                             <p className="text-sm text-slate-500">Mantén presionado para ver tu rol</p>
                         </div>
 

@@ -20,10 +20,13 @@ interface GameConfig {
     difficulty: string;
     players: number;
     impostors: number;
+    playerNames?: string[];
+    startingOrder?: 'sequential' | 'random';
 }
 
 export interface PlayerRole {
     id: number;
+    name: string;
     isImpostor: boolean;
     word: string; // The word shown to the player (or "IMPOSTOR" technically logic handled by client but server provides truth)
 }
@@ -68,11 +71,30 @@ export async function startGame(config: GameConfig) {
     }
 
     // 5. Assign to players
-    const players = roles.map((role, index) => ({
+    // If names provided, use them. Otherwise default.
+    const names = config.playerNames && config.playerNames.length === totalPlayers
+        ? config.playerNames
+        : Array.from({ length: totalPlayers }, (_, i) => `Jugador ${i + 1}`);
+
+    let players = roles.map((role, index) => ({
         id: index,
+        name: names[index],
         isImpostor: role === 'Impostor',
         word: role === 'Impostor' ? 'IMPOSTOR' : secretWord
     }));
+
+    // 6. Handle Starting Order
+    if (config.startingOrder === 'random') {
+        // Pick a random index K
+        const k = Math.floor(Math.random() * totalPlayers);
+
+        // If k > 0, we rotate. If k === 0, it happens to start with the first player (valid random outcome).
+        if (k > 0) {
+            const firstPart = players.slice(k); // From k to end
+            const secondPart = players.slice(0, k); // From 0 to k
+            players = [...firstPart, ...secondPart];
+        }
+    }
 
     return {
         players,

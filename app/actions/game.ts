@@ -76,25 +76,15 @@ export async function startGame(config: GameConfig) {
         ? config.playerNames
         : Array.from({ length: totalPlayers }, (_, i) => `Jugador ${i + 1}`);
 
-    let players = roles.map((role, index) => ({
+    const players = roles.map((role, index) => ({
         id: index,
         name: names[index],
         isImpostor: role === 'Impostor',
         word: role === 'Impostor' ? 'IMPOSTOR' : secretWord
     }));
 
-    // 6. Handle Starting Order
-    if (config.startingOrder === 'random') {
-        // Pick a random index K
-        const k = Math.floor(Math.random() * totalPlayers);
-
-        // If k > 0, we rotate. If k === 0, it happens to start with the first player (valid random outcome).
-        if (k > 0) {
-            const firstPart = players.slice(k); // From k to end
-            const secondPart = players.slice(0, k); // From 0 to k
-            players = [...firstPart, ...secondPart];
-        }
-    }
+    // Player order is already determined by the client
+    // The first player in the names array is the starting player
 
     return {
         players,

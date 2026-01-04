@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { getCategories, getDifficulties, startGame, PlayerRole } from '@/app/actions/game';
+import { selectStartingPlayerSequential, selectStartingPlayerWeighted } from '@/lib/playerStartCounter';
 
 interface GameConfigProps {
     onStart: (data: { players: PlayerRole[]; secretWord: string }) => void;
@@ -179,12 +180,28 @@ export default function GameConfig({ onStart }: GameConfigProps) {
 
         setLoading(true);
         try {
+            // Determine starting player index based on mode
+            let startingPlayerIndex = 0;
+            if (startingOrder === 'sequential') {
+                startingPlayerIndex = selectStartingPlayerSequential(playerNames);
+            } else {
+                startingPlayerIndex = selectStartingPlayerWeighted(playerNames);
+            }
+
+            // Rotate player names so the selected player is first
+            let rotatedPlayerNames = playerNames;
+            if (startingPlayerIndex > 0) {
+                const firstPart = playerNames.slice(startingPlayerIndex);
+                const secondPart = playerNames.slice(0, startingPlayerIndex);
+                rotatedPlayerNames = [...firstPart, ...secondPart];
+            }
+
             const data = await startGame({
                 category: selectedCategory,
                 difficulty: selectedDifficulty,
                 players: playerCount,
                 impostors: impostorCount,
-                playerNames: playerNames,
+                playerNames: rotatedPlayerNames,
                 startingOrder: startingOrder
             });
             onStart(data);

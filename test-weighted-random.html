@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Weighted Random Selection</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        h1 {
+            color: #6c63ff;
+        }
+        button {
+            background: #6c63ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a52d5;
+        }
+        button:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+        .results {
+            margin-top: 30px;
+            background: #16213e;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .game-log {
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .game-entry {
+            padding: 5px;
+            margin: 3px 0;
+            background: #0f3460;
+            border-radius: 4px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #6c63ff;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        .progress {
+            margin: 20px 0;
+            font-size: 18px;
+            color: #6c63ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎲 Test de Selección Aleatoria con Pesos Invertidos</h1>
+    
+    <div>
+        <p>Este test simula múltiples juegos para verificar que el algoritmo de pesos invertidos funciona correctamente.</p>
+        <p><strong>Algoritmo:</strong> peso = 1 / (vecesQueArrancó + 1)</p>
+    </div>
+
+    <div>
+        <label>Número de juegos a simular: </label>
+        <input type="number" id="numGames" value="30" min="10" max="100" style="padding: 8px; font-size: 16px; background: #0f3460; color: white; border: 1px solid #6c63ff; border-radius: 4px;">
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button id="runTest" onclick="runTest()">▶️ Ejecutar Test</button>
+        <button onclick="clearStorage()">🗑️ Limpiar localStorage</button>
+        <button onclick="location.reload()">🔄 Reiniciar</button>
+    </div>
+
+    <div class="progress" id="progress"></div>
+
+    <div class="results" id="results" style="display: none;">
+        <h2>📊 Resultados</h2>
+        <div class="stats" id="stats"></div>
+        <div class="game-log" id="gameLog"></div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'impostor_player_start_counts';
+        const playerNames = ['Ana', 'Bob', 'Carlos'];
+
+        function getPlayerStartCounts(playerNames) {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                const allCounts = stored ? JSON.parse(stored) : {};
+                
+                const counts = {};
+                playerNames.forEach(name => {
+                    counts[name] = allCounts[name] || 0;
+                });
+                
+                return counts;
+            } catch (error) {
+                console.error('Error reading player start counts:', error);
+                return {};
+            }
+        }
+
+        function incrementPlayerStartCount(playerName) {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                const allCounts = stored ? JSON.parse(stored) : {};
+                
+                allCounts[playerName] = (allCounts[playerName] || 0) + 1;
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(allCounts));
+            } catch (error) {
+                console.error('Error incrementing player start count:', error);
+            }
+        }
+
+        function selectStartingPlayerWeighted(playerNames) {
+            if (playerNames.length === 0) return 0;
+            if (playerNames.length === 1) return 0;
+            
+            const counts = getPlayerStartCounts(playerNames);
+            
+            // Calculate weights (inverse of start count + 1)
+            const weights = playerNames.map(name => {
+                const count = counts[name] || 0;
+                return 1 / (count + 1);
+            });
+            
+            // Calculate total weight
+            const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+            
+            // Generate random number between 0 and totalWeight
+            let random = Math.random() * totalWeight;
+            
+            // Select player based on weighted probability
+            for (let i = 0; i < weights.length; i++) {
+                random -= weights[i];
+                if (random <= 0) {
+                    return i;
+                }
+            }
+            
+            // Fallback (should never reach here)
+            return 0;
+        }
+
+        function clearStorage() {
+            localStorage.removeItem(STORAGE_KEY);
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('progress').textContent = 'localStorage limpiado ✅';
+        }
+
+        async function runTest() {
+            const numGames = parseInt(document.getElementById('numGames').value);
+            const button = document.getElementById('runTest');
+            button.disabled = true;
+            
+            // Clear previous results
+            localStorage.removeItem(STORAGE_KEY);
+            
+            const gameLog = [];
+            const progress = document.getElementById('progress');
+            
+            // Run simulations
+            for (let i = 0; i < numGames; i++) {
+                const counts = getPlayerStartCounts(playerNames);
+                const weights = playerNames.map(name => 1 / ((counts[name] || 0) + 1));
+                const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+                const probabilities = weights.map(w => ((w / totalWeight) * 100).toFixed(1));
+                
+                const selectedIndex = selectStartingPlayerWeighted(playerNames);
+                const selectedPlayer = playerNames[selectedIndex];
+                
+                gameLog.push({
+                    game: i + 1,
+                    player: selectedPlayer,
+                    counts: {...counts},
+                    probabilities: probabilities
+                });
+                
+                incrementPlayerStartCount(selectedPlayer);
+                
+                progress.textContent = `Simulando juego ${i + 1}/${numGames}...`;
+                
+                // Small delay to show progress
+                if (i % 5 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }
+            }
+            
+            // Display results
+            displayResults(gameLog, numGames);
+            
+            button.disabled = false;
+            progress.textContent = `✅ Test completado: ${numGames} juegos simulados`;
+        }
+
+        function displayResults(gameLog, numGames) {
+            const finalCounts = getPlayerStartCounts(playerNames);
+            
+            // Create stats cards
+            const statsHtml = playerNames.map(name => {
+                const count = finalCounts[name] || 0;
+                const percentage = ((count / numGames) * 100).toFixed(1);
+                const expected = (100 / playerNames.length).toFixed(1);
+                const deviation = (percentage - expected).toFixed(1);
+                
+                return `
+                    <div class="stat-card">
+                        <div class="stat-value">${count}</div>
+                        <div class="stat-label">${name}</div>
+                        <div style="margin-top: 10px; font-size: 12px;">
+                            ${percentage}% (esperado: ${expected}%)
+                            <br>
+                            Desviación: ${deviation > 0 ? '+' : ''}${deviation}%
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('stats').innerHTML = statsHtml;
+            
+            // Create game log
+            const logHtml = gameLog.map(entry => {
+                const probStr = playerNames.map((name, i) => 
+                    `${name}: ${entry.probabilities[i]}%`
+                ).join(', ');
+                
+                return `
+                    <div class="game-entry">
+                        Juego #${entry.game}: <strong>${entry.player}</strong> 
+                        (Contadores antes: ${JSON.stringify(entry.counts)})
+                        <br>
+                        <span style="font-size: 11px; color: #888;">Probabilidades: ${probStr}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('gameLog').innerHTML = `
+                <h3>📝 Log de Juegos</h3>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${logHtml}
+                </div>
+            `;
+            
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -12,9 +12,9 @@ type GameState = 'CONFIG' | 'REVEAL' | 'PLAYING';
 
 export default function GameManager() {
     const [gameState, setGameState] = useState<GameState>('CONFIG');
-    const [gameData, setGameData] = useState<{ players: PlayerRole[], secretWord: string } | null>(null);
+    const [gameData, setGameData] = useState<{ players: PlayerRole[], secretWord: string, category: string } | null>(null);
 
-    const handleGameStart = (data: { players: PlayerRole[], secretWord: string }) => {
+    const handleGameStart = (data: { players: PlayerRole[], secretWord: string, category: string }) => {
         setGameData(data);
         setGameState('REVEAL');
     };
@@ -44,6 +44,7 @@ export default function GameManager() {
                     <RoleReveal
                         key="reveal"
                         players={gameData.players}
+                        category={gameData.category}
                         onComplete={handleRevealComplete}
                     />
                 )}

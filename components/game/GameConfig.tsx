@@ -9,7 +9,7 @@ import { getCategories, getDifficulties, startGame, PlayerRole } from '@/app/act
 import { selectStartingPlayerSequential, selectStartingPlayerWeighted } from '@/lib/playerStartCounter';
 
 interface GameConfigProps {
-    onStart: (data: { players: PlayerRole[]; secretWord: string }) => void;
+    onStart: (data: { players: PlayerRole[]; secretWord: string; category: string }) => void;
 }
 
 export default function GameConfig({ onStart }: GameConfigProps) {

@@ -8,10 +8,27 @@ import { Eye, EyeOff } from 'lucide-react';
 
 interface RoleRevealProps {
     players: PlayerRole[];
+    category: string;
     onComplete: () => void;
 }
 
-export default function RoleReveal({ players, onComplete }: RoleRevealProps) {
+// Helper function to get emoji based on category
+function getCategoryEmoji(category: string): string {
+    const categoryLower = category.toLowerCase();
+
+    if (categoryLower.includes('fútbol') || categoryLower.includes('futbol')) {
+        return '⚽';
+    } else if (categoryLower.includes('básquet') || categoryLower.includes('basquet') || categoryLower.includes('basket')) {
+        return '🏀';
+    } else if (categoryLower.includes('tenis')) {
+        return '🎾';
+    }
+
+    // Default fallback
+    return '⚽';
+}
+
+export default function RoleReveal({ players, category, onComplete }: RoleRevealProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isRevealing, setIsRevealing] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(true); // "Pass phone to player X"
@@ -90,7 +107,7 @@ export default function RoleReveal({ players, onComplete }: RoleRevealProps) {
                                             </>
                                         ) : (
                                             <>
-                                                <span className="text-6xl">⚽</span>
+                                                <span className="text-6xl">{getCategoryEmoji(category)}</span>
                                                 <h2 className="text-4xl font-extrabold text-green-400 tracking-wider">
                                                     {currentPlayer.word}
                                                 </h2>

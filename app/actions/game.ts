@@ -88,6 +88,7 @@ export async function startGame(config: GameConfig) {
 
     return {
         players,
-        secretWord // Secret word returned for Game Over reveal, not shown to Impostor
+        secretWord, // Secret word returned for Game Over reveal, not shown to Impostor
+        category: config.category // Category for displaying appropriate emoji
     };
 }
